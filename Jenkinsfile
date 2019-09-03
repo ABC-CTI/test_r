@@ -30,12 +30,6 @@ pipeline {
         echo env.GITHUB_COMMIT
         echo env.CHANGE_ID
         echo env.BRANCH_NAME
-        }
-      }
-    }
-    stage("Push image") {
-      steps {
-        script{
         cd $DIRECTORY && make Docker
         withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
           cd $DIRECTORY && make push
