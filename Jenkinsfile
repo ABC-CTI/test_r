@@ -2,7 +2,7 @@ def image_repo
 def image_tag
 pipeline {
   agent {
-    label 'ubuntu_docker_label'
+    label 'master'
   }
   environment {
     GOPATH = "$WORKSPACE"
