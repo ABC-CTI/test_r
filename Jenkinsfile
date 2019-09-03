@@ -30,8 +30,8 @@ pipeline {
         echo env.GITHUB_COMMIT
         echo env.CHANGE_ID
         echo env.BRANCH_NAME
-        IMAGE_NAMES_LIST=`make show-image-name 2>/dev/null`
-        IMAGE_VERSION=`make show-image-version`
+        def IMAGE_NAMES_LIST=`make show-image-name 2>/dev/null`
+        def IMAGE_VERSION=`make show-image-version`
         echo "repo1=infobloxcto/${IMAGE_NAMES_LIST}" 
         echo "tag1=${IMAGE_VERSION}"
         }
