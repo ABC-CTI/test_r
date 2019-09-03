@@ -29,15 +29,19 @@ pipeline {
         echo env.GITHUB_COMMIT
         echo env.CHANGE_ID
         echo env.BRANCH_NAME
+        }
+      }
+    }
+    stage("Push image") {
+      steps {
         sh "cd $DIRECTORY && make docker"
         withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
           sh "cd $DIRECTORY && make push"
         }
 
        }
-      }
-    }
-    
+  
+    }    
     
     
     stage("Build CVE job"){
