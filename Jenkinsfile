@@ -1,3 +1,5 @@
+def image_repo
+def image_tag
 pipeline {
   agent {
     label 'master'
@@ -10,20 +12,15 @@ pipeline {
   }
 
   stages {
-    stage("JenkinsInitHasNoDocker") {
-      steps {
-        withCredentials([usernamePassword( credentialsId: 'dockerhub-bloxcicd', usernameVariable: 'DOCKER_USER', passwordVariable\
-: 'PASSWORD')]) {
-          sh "mkdir -p ${DOCKER_CONFIG}"
-          sh "echo ${PASSWORD} | docker login  -u ${DOCKER_USER} --password-stdin ${DOCKER_REGISTRY}"
-        }
-      }
-    }
+    
     stage("First") {
      
       steps {
         script{
         def url="$GIT_URL"
+        image_repo="docker.io/[*******]cto/siemserver"
+        env.image_repo=image_repo
+        image_tag="2018.21"
         final git_repo = url.substring(url.lastIndexOf('/') + 1, url.length())
         echo git_repo
         env.GIT_REPO =git_repo
@@ -39,7 +36,7 @@ pipeline {
     stage("Build CVE job"){
       steps{
     
-      build job: 'run_ngp_cve_scan_image', parameters: [[$class: 'StringParameterValue', name: 'COMMIT_ID', value:env.GITHUB_COMMIT], [$class: 'StringParameterValue', name: 'GITHUB_REPO', value:env.GIT_REPO],[$class: 'StringParameterValue', name: 'CHANGE_ID', value:env.CHANGE_ID]]
+      build job: 'run_ngp_cve_scan_image', parameters: [[$class: 'StringParameterValue', name: 'COMMIT_ID', value:env.GITHUB_COMMIT], [$class: 'StringParameterValue', name: 'GITHUB_REPO', value:env.GIT_REPO],[$class: 'StringParameterValue', name: 'CHANGE_ID', value:env.CHANGE_ID],[$class: 'StringParameterValue', name: 'image_repo', value:env.image_repo]]
       }
   }
 } 
