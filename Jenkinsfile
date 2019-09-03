@@ -9,6 +9,7 @@ pipeline {
     GITHUB_COMMIT="$GIT_COMMIT"
     CHANGE_ID="$CHANGE_ID"
     BRANCH_NAME="$BRANCH_NAME"
+    DIRECTORY="/mnt/home/adua/test_r"
   }
 
   stages {
@@ -34,9 +35,9 @@ pipeline {
     }
     stage("Push image") {
       steps {
-        sh "make Docker"
+        sh "cd $DIRECTORY && make Docker"
         withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
-          sh "make push"
+          sh "cd $DIRECTORY && make push"
         }
 
        }
