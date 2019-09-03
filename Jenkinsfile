@@ -30,7 +30,11 @@ pipeline {
         echo env.CHANGE_ID
         echo env.BRANCH_NAME
        }
-       
+       steps {
+        sh "cd $DIRECTORY && make docker"
+        withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
+          sh "cd $DIRECTORY && make push"
+        }
     }
     }
     
