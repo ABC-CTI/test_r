@@ -34,9 +34,9 @@ pipeline {
     }
     stage("Push image") {
       steps {
-        sh "cd $DIRECTORY && make docker"
+        sh "make docker"
         withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
-          sh "cd $DIRECTORY && make push"
+          sh "make push"
         }
 
        }
