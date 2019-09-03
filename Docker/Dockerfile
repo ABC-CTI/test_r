@@ -1,2 +1,2 @@
-FROM docker.io/infoblox/siemserver
+FROM docker.io/infoblox/siemserver AS builder
 
