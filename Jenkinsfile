@@ -33,6 +33,10 @@ pipeline {
         cd "$DIRECTORY && make Docker"
         withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
           cd "$DIRECTORY && make push"
+        IMAGE_NAMES_LIST=`make show-image-name 2>/dev/null`
+        IMAGE_VERSION=`make show-image-version`
+        echo "repo1=infobloxcto/${IMAGE_NAMES_LIST}" 
+        echo "tag1=${IMAGE_VERSION}"
         }
 
        }
