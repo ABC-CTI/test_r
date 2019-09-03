@@ -30,9 +30,6 @@ pipeline {
         echo env.GITHUB_COMMIT
         echo env.CHANGE_ID
         echo env.BRANCH_NAME
-        cd "$DIRECTORY && make Docker"
-        withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
-          cd "$DIRECTORY && make push"
         IMAGE_NAMES_LIST=`make show-image-name 2>/dev/null`
         IMAGE_VERSION=`make show-image-version`
         echo "repo1=infobloxcto/${IMAGE_NAMES_LIST}" 
