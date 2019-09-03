@@ -30,9 +30,9 @@ pipeline {
         echo env.GITHUB_COMMIT
         echo env.CHANGE_ID
         echo env.BRANCH_NAME
-        cd $DIRECTORY && make Docker
+        cd "$DIRECTORY && make Docker"
         withDockerRegistry([credentialsId: "dockerhub-bloxcicd", url: ""]) {
-          cd $DIRECTORY && make push
+          cd "$DIRECTORY && make push"
         }
 
        }
@@ -40,14 +40,12 @@ pipeline {
     }    
     }
     
-    post{
-      success{
     stage("Build CVE job"){
       steps{
     
       build job: 'run_docker_image_cve_scan', parameters: [[$class: 'StringParameterValue', name: 'COMMIT_ID', value:env.GITHUB_COMMIT], [$class: 'StringParameterValue', name: 'GITHUB_REPO', value:env.GIT_REPO],[$class: 'StringParameterValue', name: 'CHANGE_ID', value:env.CHANGE_ID],[$class: 'StringParameterValue', name: 'repo', value:env.image_repo],[$class: 'StringParameterValue', name: 'tag', value:env.image_tag]]
-      }
-    }
+      
+   
       }
   }
 } 
