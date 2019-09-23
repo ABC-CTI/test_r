@@ -1,53 +1,36 @@
-def image_repo
-def image_tag
 pipeline {
   agent {
     label 'master'
   }
+  
+  parameters {
+    string(name: 'image_repo', defaultValue: '', description: 'Docker image repo')
+    string(name: 'image_tag', defaultValue: '', description: 'Docker image tag')
+    string(name: 'github_repo', defaultValue: '', description: 'Github repo')
+  }
+  
   environment {
-    GOPATH = "$WORKSPACE"
-    GITHUB_COMMIT="$GIT_COMMIT"
-    CHANGE_ID="$CHANGE_ID"
-    BRANCH_NAME="$BRANCH_NAME"
-    DIRECTORY="/mnt/home/adua/test_r"
+    image_repo = get_image_repo_from(params)
+    image_tag = get_image_tag_from(params)
+    upstream_github_repo = get_github_repo_from(params)
+    upstream_execution_url = "$BUILD_URL"
+    upstream_job_name = "$JOB_BASE_NAME"
+    upstream_build_id = "$BUILD_ID"
+    email_recipients = get_email_recipients(ownership)
   }
 
   stages {
-    
-    stage("First") {
-     
+    stage("Test Stage") {
       steps {
-        script{
-        def url="$GIT_URL"
-        image_repo="docker.io/infobloxcto/siemserver"
-        env.image_repo=image_repo
-        image_tag="2018.21"
-        env.image_tag=image_tag
-        final git_repo = url.substring(url.lastIndexOf('/') + 1, url.length())
-        echo git_repo
-        env.GIT_REPO =git_repo
-        echo env.GIT_REPO
-        echo env.GITHUB_COMMIT
-        echo env.CHANGE_ID
-        echo env.BRANCH_NAME
-        
-        }
-
-       }
-  
-    }    
-    
-    
-    stage("Build CVE job"){
-      when{
-          not{
-            changeRequest()}
-        }
-        steps{
-      build job: 'run_docker_image_cve_scan', parameters: [[$class: 'StringParameterValue', name: 'COMMIT_ID', value:env.GITHUB_COMMIT], [$class: 'StringParameterValue', name: 'GITHUB_REPO', value:env.GIT_REPO],[$class: 'StringParameterValue', name: 'repo', value:env.image_repo],[$class: 'StringParameterValue', name: 'tag', value:env.image_tag]]
-        }
-   
+        sh "pwd"
+        sh "ls -Alh"
       }
+    }
   }
-} 
-
+  
+  post {
+    always {
+            cleanWs()
+        }
+  }
+}
