@@ -23,7 +23,7 @@ pipeline {
     stage("Test Stage") {
       steps {
         sh "pwd"
-        sh "ls -Alh"
+        sh "ls -Alhd"
       }
     }
   }
